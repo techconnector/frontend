@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
 
 import Navbar from "../../components/layouts/Navbar";
 
@@ -15,12 +16,12 @@ export default function Landing() {
               other developers
             </p>
             <div className="buttons">
-              <a href="register.html" className="btn btn-primary">
+              <Link to="/register" className="btn btn-primary">
                 Sign Up
-              </a>
-              <a href="login.html" className="btn btn-light">
+              </Link>
+              <Link to="/login" className="btn btn-light">
                 Login
-              </a>
+              </Link>
             </div>
           </div>
         </div>
