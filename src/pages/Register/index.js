@@ -1,33 +1,26 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { Form } from "@unform/web";
 
 import { setAlert } from "../../actions/alert";
-import Navbar from "../../components/layouts/Navbar";
-import Alert from "../../components/layouts/Alert";
+import { register } from "../../actions/auth";
+import Navbar from "../../components/Layouts/Navbar";
+import Alert from "../../components/Layouts/Alert";
+import { Input } from "../../components/Form";
 
-function Register({ setAlert }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    password2: "",
-  });
+function Register({ setAlert, register, errors, success }) {
+  const formRef = useRef(null);
 
-  const { name, email, password, password2 } = formData;
+  useEffect(() => formRef.current.setErrors(errors), [errors]);
+  useEffect(() => formRef.current.reset(), [success]);
 
-  function onChange(e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
-
-  async function onSubmit(e) {
-    e.preventDefault();
-
-    if (password !== password2) {
+  async function onSubmit(data) {
+    if (data.password !== data.password2) {
       setAlert("Passwords do not match", "danger");
     } else {
-      console.log("Success");
+      register(data);
     }
   }
 
@@ -40,49 +33,29 @@ function Register({ setAlert }) {
         <p className="lead">
           <i className="fas fa-user"></i> Create Your Account
         </p>
-        <form className="form" method="post" onSubmit={onSubmit}>
-          <div className="form-group">
-            <input
-              type="text"
-              placeholder="Name"
-              name="name"
-              value={name}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="email"
-              placeholder="Email"
-              name="email"
-              value={email}
-              onChange={(e) => onChange(e)}
-            />
-            <small className="form-text">
-              This site uses Gravatar, so if you want a profile image, use a
-              Gravatar email
-            </small>
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              placeholder="Password"
-              name="password"
-              value={password}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              name="password2"
-              value={password2}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <input type="submit" value="Register" className="btn btn-primary" />
-        </form>
+        <Form ref={formRef} onSubmit={onSubmit} method="post" className="form">
+          <Input placeholder="Name" name="name" error={errors.name} />
+          <Input
+            legend="This site uses Gravatar, so if you want a profile image, use a Gravatar email"
+            placeholder="Email"
+            name="email"
+            error={errors.email}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            name="password"
+            error={errors.password}
+          />
+          <Input
+            type="password"
+            placeholder="Confirm Password"
+            name="password2"
+          />
+          <button type="submit" className="btn btn-primary">
+            Register
+          </button>
+        </Form>
         <p className="my-1">
           Already have an account? <Link to="/login">Sign In</Link>
         </p>
@@ -93,6 +66,16 @@ function Register({ setAlert }) {
 
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
+  success: PropTypes.bool.isRequired,
 };
 
-export default connect(null, { setAlert })(Register);
+function mapStateToProps({ auth }) {
+  return {
+    errors: auth.errors,
+    success: auth.success,
+  };
+}
+
+export default connect(mapStateToProps, { setAlert, register })(Register);

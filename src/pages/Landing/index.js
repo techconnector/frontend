@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 
-import Navbar from "../../components/layouts/Navbar";
+import Navbar from "../../components/Layouts/Navbar";
 
 export default function Landing() {
   return (

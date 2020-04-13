@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 
-import Navbar from "../../components/layouts/Navbar";
+import Navbar from "../../components/Layouts/Navbar";
 
 export default function Login() {
   const [formData, setFormData] = useState({
