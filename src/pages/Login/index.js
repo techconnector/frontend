@@ -1,55 +1,55 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useRef } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { Form } from "@unform/web";
 
+import { setAlert } from "../../actions/alert";
+import { login } from "../../actions/auth";
 import Navbar from "../../components/Layouts/Navbar";
+import Alert from "../../components/Layouts/Alert";
+import { Input } from "../../components/Form";
+import { useEffect } from "react";
 
-export default function Login() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+function Login({ setAlert, login, errors, success }) {
+  const formRef = useRef(null);
 
-  const { email, password } = formData;
+  useEffect(() => {
+    if (errors.global) {
+      setAlert(errors.global, "danger");
+    }
 
-  function onChange(e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
+    formRef.current.setErrors(errors);
+  }, [errors]);
 
-  async function onSubmit(e) {
-    e.preventDefault();
+  useEffect(() => formRef.current.reset(), [success]);
 
-    console.log("Success");
+  async function onSubmit(data) {
+    const { email, password } = data;
+
+    login(email, password);
   }
 
   return (
     <Fragment>
       <Navbar />
       <div className="container">
+        <Alert />
         <h1 className="large text-primary">Sign In</h1>
         <p className="lead">
           <i className="fas fa-user"></i> Sign Into Your Account
         </p>
-        <form className="form" method="post" onSubmit={onSubmit}>
+        <Form ref={formRef} onSubmit={onSubmit} method="post" className="form">
           <div className="form-group">
-            <input
-              type="email"
-              placeholder="Email"
-              name="email"
-              value={email}
-              onChange={(e) => onChange(e)}
-            />
+            <Input type="email" name="email" placeholder="Email" />
           </div>
           <div className="form-group">
-            <input
-              type="password"
-              placeholder="Password"
-              name="password"
-              value={password}
-              onChange={(e) => onChange(e)}
-            />
+            <Input type="password" name="password" placeholder="Password" />
           </div>
-          <input type="submit" value="Register" className="btn btn-primary" />
-        </form>
+          <button type="submit" className="btn btn-primary">
+            Register
+          </button>
+        </Form>
         <p className="my-1">
           Don't have an account? <Link to="/register">Sign Up</Link>
         </p>
@@ -57,3 +57,19 @@ export default function Login() {
     </Fragment>
   );
 }
+
+Login.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
+  success: PropTypes.bool.isRequired,
+};
+
+function mapStateToProps({ auth }) {
+  return {
+    errors: auth.errors,
+    success: auth.success,
+  };
+}
+
+export default connect(mapStateToProps, { setAlert, login })(Login);
