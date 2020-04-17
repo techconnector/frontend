@@ -20,7 +20,7 @@ function Login({ setAlert, login, errors, success }) {
     }
 
     formRef.current.setErrors(errors);
-  }, [errors]);
+  }, [setAlert, errors]);
 
   useEffect(() => formRef.current.reset(), [success]);
 
