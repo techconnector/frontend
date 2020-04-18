@@ -1,15 +1,13 @@
-import React, { Fragment, useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import { Form } from "@unform/web";
 
+import Master from "../../components/Layouts/Master";
+import { Input } from "../../components/Form";
 import { setAlert } from "../../actions/alert";
 import { login } from "../../actions/auth";
-import Navbar from "../../components/Layouts/Navbar";
-import Alert from "../../components/Layouts/Alert";
-import { Input } from "../../components/Form";
-import { useEffect } from "react";
 
 function Login({ setAlert, login, errors, success, isAuthenticated }) {
   const formRef = useRef(null);
@@ -19,10 +17,16 @@ function Login({ setAlert, login, errors, success, isAuthenticated }) {
       setAlert(errors.global, "danger");
     }
 
-    formRef.current.setErrors(errors);
+    if (formRef.current) {
+      formRef.current.setErrors(errors);
+    }
   }, [setAlert, errors]);
 
-  useEffect(() => formRef.current.reset(), [success]);
+  useEffect(() => {
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+  }, [success]);
 
   async function onSubmit(data) {
     const { email, password } = data;
@@ -35,30 +39,26 @@ function Login({ setAlert, login, errors, success, isAuthenticated }) {
   }
 
   return (
-    <Fragment>
-      <Navbar />
-      <div className="container">
-        <Alert />
-        <h1 className="large text-primary">Sign In</h1>
-        <p className="lead">
-          <i className="fas fa-user"></i> Sign Into Your Account
-        </p>
-        <Form ref={formRef} onSubmit={onSubmit} method="post" className="form">
-          <div className="form-group">
-            <Input type="email" name="email" placeholder="Email" />
-          </div>
-          <div className="form-group">
-            <Input type="password" name="password" placeholder="Password" />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Register
-          </button>
-        </Form>
-        <p className="my-1">
-          Don't have an account? <Link to="/register">Sign Up</Link>
-        </p>
-      </div>
-    </Fragment>
+    <Master>
+      <h1 className="large text-primary">Sign In</h1>
+      <p className="lead">
+        <i className="fas fa-user"></i> Sign Into Your Account
+      </p>
+      <Form ref={formRef} onSubmit={onSubmit} method="post" className="form">
+        <div className="form-group">
+          <Input type="email" name="email" placeholder="Email" />
+        </div>
+        <div className="form-group">
+          <Input type="password" name="password" placeholder="Password" />
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Register
+        </button>
+      </Form>
+      <p className="my-1">
+        Don't have an account? <Link to="/register">Sign Up</Link>
+      </p>
+    </Master>
   );
 }
 
@@ -78,4 +78,6 @@ function mapStateToProps({ auth }) {
   };
 }
 
-export default connect(mapStateToProps, { setAlert, login })(Login);
+const mapDispatchToProps = { setAlert, login };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
