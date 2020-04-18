@@ -1,7 +1,7 @@
 import React, { Fragment, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Form } from "@unform/web";
 
 import { setAlert } from "../../actions/alert";
@@ -10,7 +10,7 @@ import Navbar from "../../components/Layouts/Navbar";
 import Alert from "../../components/Layouts/Alert";
 import { Input } from "../../components/Form";
 
-function Register({ setAlert, register, errors, success }) {
+function Register({ setAlert, register, errors, success, isAuthenticated }) {
   const formRef = useRef(null);
 
   useEffect(() => formRef.current.setErrors(errors), [errors]);
@@ -22,6 +22,10 @@ function Register({ setAlert, register, errors, success }) {
     } else {
       register(data);
     }
+  }
+
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
   }
 
   return (
@@ -69,12 +73,14 @@ Register.propTypes = {
   register: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
   success: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
 function mapStateToProps({ auth }) {
   return {
     errors: auth.errors,
     success: auth.success,
+    isAuthenticated: auth.isAuthenticated,
   };
 }
 

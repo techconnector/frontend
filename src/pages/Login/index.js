@@ -1,7 +1,7 @@
 import React, { Fragment, useRef } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Form } from "@unform/web";
 
 import { setAlert } from "../../actions/alert";
@@ -11,7 +11,7 @@ import Alert from "../../components/Layouts/Alert";
 import { Input } from "../../components/Form";
 import { useEffect } from "react";
 
-function Login({ setAlert, login, errors, success }) {
+function Login({ setAlert, login, errors, success, isAuthenticated }) {
   const formRef = useRef(null);
 
   useEffect(() => {
@@ -28,6 +28,10 @@ function Login({ setAlert, login, errors, success }) {
     const { email, password } = data;
 
     login(email, password);
+  }
+
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
   }
 
   return (
@@ -63,12 +67,14 @@ Login.propTypes = {
   login: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
   success: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
 function mapStateToProps({ auth }) {
   return {
     errors: auth.errors,
     success: auth.success,
+    isAuthenticated: auth.isAuthenticated,
   };
 }
 
