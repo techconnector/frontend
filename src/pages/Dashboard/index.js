@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 import Master from "../../components/Layouts/Master";
+import { getCurrentProfile } from "../../actions/profile";
 
-function Dashboard() {
+function Dashboard({ getCurrentProfile, auth, profile }) {
+  useEffect(() => {
+    getCurrentProfile();
+  }, []);
+
   return (
     <Master>
       <h1 className="large text-primary">Dashboard</h1>
@@ -11,6 +17,21 @@ function Dashboard() {
   );
 }
 
-Dashboard.propTypes = {};
+Dashboard.propTypes = {
+  getCurrentProfile: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
+};
 
-export default Dashboard;
+function mapStateToProps({ profile, auth }) {
+  return {
+    auth,
+    profile,
+  };
+}
+
+const mapDispatchToProps = {
+  getCurrentProfile,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
