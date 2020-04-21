@@ -1,9 +1,15 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 
 import Navbar from "../../components/Layouts/Navbar";
 
-export default function Landing() {
+function Landing({ isAuthenticated }) {
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
+
   return (
     <Fragment>
       <Navbar />
@@ -29,3 +35,15 @@ export default function Landing() {
     </Fragment>
   );
 }
+
+Landing.propTypes = {
+  isAuthenticated: PropTypes.bool,
+};
+
+function mapStateToProps({ auth }) {
+  return {
+    isAuthenticated: auth.isAuthenticated,
+  };
+}
+
+export default connect(mapStateToProps)(Landing);
