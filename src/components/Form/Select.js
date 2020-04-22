@@ -1,20 +1,14 @@
 import React, { Fragment, useEffect, useRef } from "react";
 import { useField } from "@unform/core";
 
-export default function Input({
-  name,
-  type = "text",
-  label,
-  subtitle,
-  ...rest
-}) {
-  const inputRef = useRef(null);
+export default function Select({ name, label, subtitle, children, ...rest }) {
+  const selectRef = useRef(null);
   const { fieldName, registerField, defaultValue, error } = useField(name);
 
   useEffect(() => {
     registerField({
       name: fieldName,
-      ref: inputRef.current,
+      ref: selectRef.current,
       path: "value",
     });
   }, [fieldName, registerField]);
@@ -22,7 +16,9 @@ export default function Input({
   return (
     <Fragment>
       {label && <label>{label}</label>}
-      <input ref={inputRef} defaultValue={defaultValue} type={type} {...rest} />
+      <select ref={selectRef} defaultValue={defaultValue} {...rest}>
+        {children}
+      </select>
       {subtitle && <small className="form-text">{subtitle}</small>}
       {error && <span className="error">{error}</span>}
     </Fragment>
