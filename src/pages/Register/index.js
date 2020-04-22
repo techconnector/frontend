@@ -5,26 +5,29 @@ import { Link, Redirect } from "react-router-dom";
 import { Form } from "@unform/web";
 
 import Master from "../../components/Layouts/Master";
-import { Input } from "../../components/Form";
+import { Button, FormGroup, Input } from "../../components/Form";
 import { setAlert } from "../../actions/alert";
 import { register } from "../../actions/auth";
 
 function Register({ setAlert, register, errors, success, isAuthenticated }) {
   const formRef = useRef(null);
 
-  useEffect(() => {
-    if (formRef.current) {
-      formRef.current.setErrors(errors);
-    }
-  }, [errors]);
+  useEffect(onSuccess, [success]);
+  useEffect(onError, [errors]);
 
-  useEffect(() => {
+  function onSuccess() {
     if (formRef.current) {
       formRef.current.reset();
     }
-  }, [success]);
+  }
 
-  async function onSubmit(data) {
+  function onError() {
+    if (formRef.current) {
+      formRef.current.setErrors(errors);
+    }
+  }
+
+  function onSubmit(data) {
     if (data.password !== data.password2) {
       setAlert("Passwords do not match", "danger");
     } else {
@@ -43,27 +46,37 @@ function Register({ setAlert, register, errors, success, isAuthenticated }) {
         <i className="fas fa-user"></i> Create Your Account
       </p>
       <Form ref={formRef} onSubmit={onSubmit} method="post" className="form">
-        <Input placeholder="Name" name="name" error={errors.name} />
-        <Input
-          legend="This site uses Gravatar, so if you want a profile image, use a Gravatar email"
-          placeholder="Email"
-          name="email"
-          error={errors.email}
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          name="password"
-          error={errors.password}
-        />
-        <Input
-          type="password"
-          placeholder="Confirm Password"
-          name="password2"
-        />
-        <button type="submit" className="btn btn-primary">
+        <FormGroup>
+          <Input placeholder="Name" name="name" error={errors.name} />
+        </FormGroup>
+
+        <FormGroup>
+          <Input
+            subtitle="This site uses Gravatar, so if you want a profile image, use a Gravatar email"
+            placeholder="Email"
+            name="email"
+            error={errors.email}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Input
+            type="password"
+            placeholder="Password"
+            name="password"
+            error={errors.password}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Input
+            type="password"
+            placeholder="Confirm Password"
+            name="password2"
+          />
+        </FormGroup>
+        <Button type="submit" className="btn-primary">
           Register
-        </button>
+        </Button>
       </Form>
       <p className="my-1">
         Already have an account? <Link to="/login">Sign In</Link>
