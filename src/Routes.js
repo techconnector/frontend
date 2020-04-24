@@ -1,6 +1,7 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Switch } from "react-router-dom";
 
+import GuestRoute from "./components/Routing/GuestRoute";
 import PrivateRoute from "./components/Routing/PrivateRoute";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
@@ -11,9 +12,9 @@ export default function Routes() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" component={Landing} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/login" component={Login} />
+        <GuestRoute exact path="/" component={Landing} />
+        <GuestRoute exact path="/register" component={Register} />
+        <GuestRoute exact path="/login" component={Login} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
       </Switch>
     </BrowserRouter>
