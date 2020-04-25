@@ -43,7 +43,7 @@ function Register({ setAlert, register, errors, success }) {
       </p>
       <Form ref={formRef} onSubmit={onSubmit} method="post" className="form">
         <FormGroup>
-          <Input placeholder="Name" name="name" error={errors.name} />
+          <Input placeholder="Name" name="name" />
         </FormGroup>
 
         <FormGroup>
@@ -51,17 +51,11 @@ function Register({ setAlert, register, errors, success }) {
             subtitle="This site uses Gravatar, so if you want a profile image, use a Gravatar email"
             placeholder="Email"
             name="email"
-            error={errors.email}
           />
         </FormGroup>
 
         <FormGroup>
-          <Input
-            type="password"
-            placeholder="Password"
-            name="password"
-            error={errors.password}
-          />
+          <Input type="password" placeholder="Password" name="password" />
         </FormGroup>
         <FormGroup>
           <Input
