@@ -7,6 +7,8 @@ import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import ProfileCreate from "./pages/Profile/Create";
+import ProfileEdit from "./pages/Profile/Edit";
 
 export default function Routes() {
   return (
@@ -16,6 +18,8 @@ export default function Routes() {
         <GuestRoute exact path="/register" component={Register} />
         <GuestRoute exact path="/login" component={Login} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <PrivateRoute exact path="/create-profile" component={ProfileCreate} />
+        <PrivateRoute exact path="/edit-profile" component={ProfileEdit} />
       </Switch>
     </BrowserRouter>
   );

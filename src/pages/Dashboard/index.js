@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 
 import Master from "../../components/Layouts/Master";
 import Spinner from "../../components/Layouts/Spinner";
+import Actions from "./Actions";
 import { getCurrentProfile } from "../../actions/profile";
 
 function Dashboard({
@@ -27,7 +28,9 @@ function Dashboard({
             <i className="fas fa-user"></i> Welcome {user && user.name}
           </p>
           {profile !== null ? (
-            <Fragment>has</Fragment>
+            <Fragment>
+              <Actions />
+            </Fragment>
           ) : (
             <Fragment>
               <p>You have not yet setup a profile, please add some info</p>

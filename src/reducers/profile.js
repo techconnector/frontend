@@ -5,7 +5,7 @@ const initialState = {
   profiles: [],
   repos: [],
   loading: true,
-  error: {},
+  errors: {},
   success: false,
 };
 
@@ -22,7 +22,7 @@ export default function (state = initialState, action) {
     case PROFILE_ERROR:
       return {
         ...state,
-        error: payload,
+        errors: payload,
         loading: false,
       };
     case CLEAR_PROFILE:
