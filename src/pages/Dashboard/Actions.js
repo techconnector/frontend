@@ -13,7 +13,7 @@ export default function Actions() {
       </Link>
 
       <Link to="/add-education" className="btn">
-        <i className="fas fa-graduation-cap text-primary"></i> Edit Education
+        <i className="fas fa-graduation-cap text-primary"></i> Add Education
       </Link>
     </div>
   );

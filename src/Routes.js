@@ -9,6 +9,8 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ProfileCreate from "./pages/Profile/Create";
 import ProfileEdit from "./pages/Profile/Edit";
+import ProfileEducationCreate from "./pages/Education/Create";
+import ProfileExperienceCreate from "./pages/Experience/Create";
 
 export default function Routes() {
   return (
@@ -20,6 +22,16 @@ export default function Routes() {
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
         <PrivateRoute exact path="/create-profile" component={ProfileCreate} />
         <PrivateRoute exact path="/edit-profile" component={ProfileEdit} />
+        <PrivateRoute
+          exact
+          path="/add-education"
+          component={ProfileEducationCreate}
+        />
+        <PrivateRoute
+          exact
+          path="/add-experience"
+          component={ProfileExperienceCreate}
+        />
       </Switch>
     </BrowserRouter>
   );
